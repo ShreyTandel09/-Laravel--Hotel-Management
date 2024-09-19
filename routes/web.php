@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HotelRoomsController;
+use App\Http\Controllers\RoomRentsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +30,11 @@ Route::get('/rooms/create', [HotelRoomsController::class, 'create'])->name('room
 Route::post('/rooms', [HotelRoomsController::class, 'store'])->name('rooms.store');
 Route::get('/rooms/{id}', [HotelRoomsController::class, 'show'])->name('rooms.show');
 
+
 // Routes for Booking Management
-Route::get('/bookings/create', [BookingController::class, 'create'])->name('bookings.create');
-Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
+Route::resource('bookings', BookingController::class);
+
+
+
+
+Route::resource('room-rents', RoomRentsController::class);

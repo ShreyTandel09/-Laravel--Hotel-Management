@@ -7,13 +7,18 @@
 <form action="{{ route('bookings.store') }}" method="POST">
     @csrf
     <div class="form-group">
-        <label for="customer_name">Customer Name</label>
-        <input type="text" name="customer_name" id="customer_name" class="form-control" required>
+        <label for="name"> Name</label>
+        <input type="text" name="name" id="name" class="form-control" required>
     </div>
 
     <div class="form-group">
-        <label for="customer_email">Customer Email</label>
-        <input type="email" name="customer_email" id="customer_email" class="form-control" required>
+        <label for="email"> Email</label>
+        <input type="email" name="email" id="email" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="phone"> phone</label>
+        <input type="phone" name="phone" id="phone" class="form-control" required>
     </div>
 
     <div class="form-group">
