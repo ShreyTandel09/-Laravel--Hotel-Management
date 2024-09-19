@@ -1,0 +1,76 @@
+/* public/css/style.css */
+
+/* General body styling */
+body {
+    background-color: #f8f9fa;
+}
+
+/* Navigation bar */
+.navbar {
+    margin-bottom: 20px;
+}
+
+/* Dashboard heatmap */
+.heatmap table {
+    width: 100%;
+    margin: 20px 0;
+}
+
+.heatmap td {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+    color: #fff;
+}
+
+.heatmap td[style*="red"] {
+    background-color: #dc3545 !important;
+}
+
+.heatmap td[style*="orange"] {
+    background-color: #fd7e14 !important;
+}
+
+.heatmap td[style*="yellow"] {
+    background-color: #ffc107 !important;
+}
+
+/* Tables */
+.table {
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    text-align: center;
+}
+
+/* Forms */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.btn-success, .btn-primary {
+    margin-top: 20px;
+}
+
+/* Room summary, vacancies, etc. */
+#roomSummary, #vacancies {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1, h3 {
+    color: #343a40;
+}
