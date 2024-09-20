@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Customer;
 use App\Models\HotelRooms;
+use App\Models\RoomRents;
+use DateTime;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
     public function index()
     {
-
-        // dd("here");
         $bookings = Booking::with('customer', 'room')->get();
         return view('bookings.index', compact('bookings'));
     }
@@ -38,30 +38,29 @@ class BookingController extends Controller
                 // 'room_id' => 'required|exists:rooms,id',
             ]);
 
-            // dd($validatedData);
 
             // Create a new customer using validated data
             $customer = Customer::create($validatedData);
 
+            // dd($request->room_no);
+
             // Find the room
-            $room = HotelRooms::find(1);
+            $room = HotelRooms::findOrFail($request->room_no);
 
-            // dd($room);
-
-            // Calculate total cost
-            $totalCost = $this->calculateTotalCost($room, $request->start_date, $request->end_date);
+            // dd($room->id);  
 
             // Store the booking
             Booking::create([
                 'customer_id' => $customer->id,
-                'room_id' => $room->id,
+                'hotel_rooms_id' => $room->id,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
-                'total_cost' => $totalCost,
+                'total_cost' => $request->total_cost,
             ]);
 
             return redirect()->route('bookings.index')->with('success', 'Booking successful!');
         } catch (\Throwable $th) {
+            dd($th);
             return redirect()->back()->withErrors(['error' => 'Booking failed.'])->withInput();
         }
     }
@@ -112,11 +111,31 @@ class BookingController extends Controller
         return redirect()->route('bookings.index')->with('success', 'Booking deleted successfully!');
     }
 
-    private function calculateTotalCost($room, $startDate, $endDate)
+    public function calculateCost(Request $request)
     {
-        // Logic to calculate cost based on RoomRent table for the selected dates
-        $totalCost = 0;
-        // Fetch rent per day and calculate total
-        return $totalCost; // Adjust this according to your logic
+
+        // dd($request->all());
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $roomType = $request->input('room_type');
+        $roomNo = $request->input('room_no');
+
+
+        // Define cost per night
+        $costPerNight = RoomRents::where('hotel_rooms_id', $roomNo)->pluck("rent");
+
+        // dd($costPerNight[0]);
+
+        // Validate dates
+        if ($startDate && $endDate) {
+            $start = new DateTime($startDate);
+            $end = new DateTime($endDate);
+            $interval = $start->diff($end);
+
+            if ($interval->days >= 0) {
+                $totalCost = $interval->days * ($costPerNight[0] ?? 0);
+                return response()->json(['total_cost' => $totalCost]);
+            }
+        }
     }
 }

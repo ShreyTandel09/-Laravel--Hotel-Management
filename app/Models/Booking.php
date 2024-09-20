@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     use HasFactory;
-    protected $fillable = ['customer_id', 'room_id', 'start_date', 'end_date', 'total_cost'];
+    protected $fillable = ['customer_id', 'room_id', 'start_date', 'end_date', 'total_cost', 'hotel_rooms_id'];
 
     public function customer()
     {
@@ -17,6 +17,6 @@ class Booking extends Model
 
     public function room()
     {
-        return $this->belongsTo(HotelRooms::class);
+        return $this->belongsTo(HotelRooms::class, 'hotel_rooms_id'); // Ensure 'room_id' is the correct foreign key
     }
 }

@@ -32,12 +32,12 @@ Route::get('/', function () {
 
 Route::resource('rooms', HotelRoomsController::class);
 
+Route::post('/rooms/available', [HotelRoomsController::class, 'getAvailableRooms'])->name('rooms.available');
+Route::post('/calculate-cost', [BookingController::class, 'calculateCost'])->name('calculate.cost');
 
 
 // Routes for Booking Management
 Route::resource('bookings', BookingController::class);
-
-
 
 
 Route::resource('room-rents', RoomRentsController::class);

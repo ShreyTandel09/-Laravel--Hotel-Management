@@ -22,9 +22,9 @@
 
     <div class="form-group">
         <label>Amenities</label><br>
-        <label><input type="checkbox" name="amenities[bathtub]" value="1"> Bathtub</label><br>
-        <label><input type="checkbox" name="amenities[balcony]" value="1"> Balcony</label><br>
-        <label><input type="checkbox" name="amenities[mini_bar]" value="1"> Mini Bar</label>
+        <label><input type="checkbox" name="amenities[]" value="bathtub"> Bathtub</label><br>
+        <label><input type="checkbox" name="amenities[]" value="balcony"> Balcony</label><br>
+        <label><input type="checkbox" name="amenities[]" value="mini_bar"> Mini Bar</label>
     </div>
 
     <div class="form-group">

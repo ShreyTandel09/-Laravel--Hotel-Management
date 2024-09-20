@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\HotelRooms;
 use App\Models\RoomRents;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HotelRoomsController extends Controller
 {
@@ -116,5 +117,24 @@ class HotelRoomsController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
             'rent' => 'required|numeric|min:0',
         ]);
+    }
+
+
+    public function getAvailableRooms(Request $request)
+    {
+        $roomType = $request->input('room_type');
+        $amenities = $request->input('amenities', []);
+
+        // Fetch rooms based on room type and selected amenities
+        $rooms = HotelRooms::where('room_type', $roomType)
+            ->where(function ($query) use ($amenities) {
+                foreach ($amenities as $amenity) {
+                    // Search for each amenity in the JSON array
+                    $query->orWhereRaw('JSON_CONTAINS(amenities, \'["' . $amenity . '"]\')');
+                }
+            })
+            ->get();
+
+        return response()->json($rooms);
     }
 }

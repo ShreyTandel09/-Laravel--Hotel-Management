@@ -34,10 +34,8 @@
             <td>{{ $room->rent }}</td>
             <td>
                 @if($room->amenities)
-                @foreach(json_decode($room->amenities) as $amenity => $enabled)
-                @if ($enabled)
+                @foreach(json_decode($room->amenities) as $amenity )
                 {{ ucfirst($amenity) }}
-                @endif
                 @endforeach
                 @else
                 No Amenities
