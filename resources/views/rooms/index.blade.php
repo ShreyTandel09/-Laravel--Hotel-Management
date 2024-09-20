@@ -1,18 +1,27 @@
-<!-- resources/views/rooms/index.blade.php -->
 @extends('layouts.app')
 
 @section('content')
-<h1>Rooms</h1>
+<h1>Room List</h1>
 
-<a href="{{ route('rooms.create') }}" class="btn btn-primary">Add New Room</a>
+@if (session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
 
-<table class="table table-striped table-hover">
+<a href="{{ route('rooms.create') }}" class="btn btn-primary mb-3">Add Room</a>
+
+<table class="table">
     <thead>
         <tr>
             <th>Room No</th>
             <th>Room Type</th>
-            <th>Amenities</th>
             <th>Max Occupancy</th>
+            <th>Rent</th>
+            <th>Amenities</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+
             <th>Actions</th>
         </tr>
     </thead>
@@ -21,13 +30,31 @@
         <tr>
             <td>{{ $room->room_no }}</td>
             <td>{{ $room->room_type }}</td>
-            <td>
-                @foreach (json_decode($room->amenities) as $amenity => $value)
-                @if ($value) {{ ucfirst($amenity) }} @endif
-                @endforeach
-            </td>
             <td>{{ $room->max_occupancy }}</td>
-            <td><a href="{{ route('rooms.show', $room->id) }}" class="btn btn-info">View</a></td>
+            <td>{{ $room->rent }}</td>
+            <td>
+                @if($room->amenities)
+                @foreach(json_decode($room->amenities) as $amenity => $enabled)
+                @if ($enabled)
+                {{ ucfirst($amenity) }}
+                @endif
+                @endforeach
+                @else
+                No Amenities
+                @endif
+            </td>
+            <td>{{ $room->start_date }}</td>
+            <td>{{ $room->end_date }}</td>
+
+            <td>
+                <a href="{{ route('rooms.edit', $room->id) }}" class="btn btn-warning">Edit</a>
+
+                <form action="{{ route('rooms.destroy', $room->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this room?')">Delete</button>
+                </form>
+            </td>
         </tr>
         @endforeach
     </tbody>

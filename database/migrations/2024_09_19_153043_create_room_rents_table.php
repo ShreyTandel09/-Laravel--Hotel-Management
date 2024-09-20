@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('room_rents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('room_id')->constrained()->onDelete('cascade');
+            $table->foreignId('hotel_rooms_id')->constrained()->onDelete('cascade');
             $table->date('start_date');
             $table->date('end_date');
             $table->decimal('rent', 8, 2); // Rent amount

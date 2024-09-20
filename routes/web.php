@@ -25,10 +25,13 @@ Route::get('/', function () {
 })->name('dashboard');
 
 // Routes for Room Management
-Route::get('/rooms', [HotelRoomsController::class, 'index'])->name('rooms.index');
-Route::get('/rooms/create', [HotelRoomsController::class, 'create'])->name('rooms.create');
-Route::post('/rooms', [HotelRoomsController::class, 'store'])->name('rooms.store');
-Route::get('/rooms/{id}', [HotelRoomsController::class, 'show'])->name('rooms.show');
+// Route::get('/rooms', [HotelRoomsController::class, 'index'])->name('rooms.index');
+// Route::get('/rooms/create', [HotelRoomsController::class, 'create'])->name('rooms.create');
+// Route::post('/rooms', [HotelRoomsController::class, 'store'])->name('rooms.store');
+// Route::get('/rooms/{id}', [HotelRoomsController::class, 'show'])->name('rooms.show');
+
+Route::resource('rooms', HotelRoomsController::class);
+
 
 
 // Routes for Booking Management

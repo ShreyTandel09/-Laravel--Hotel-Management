@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('rooms', function (Blueprint $table) {
+        Schema::create('hotel_rooms', function (Blueprint $table) {
             $table->id();
             $table->string('room_no')->unique();
             $table->enum('room_type', ['Deluxe', 'Luxury', 'Royal']);

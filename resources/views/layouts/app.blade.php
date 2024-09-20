@@ -26,8 +26,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('bookings.create') }}">Book a Room</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="{{ route('room-rents.index') }}">Room Rent Management</a>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('bookings.index') }}">Bookings</a>
                 </li>
             </ul>
         </div>
