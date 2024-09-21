@@ -4,6 +4,7 @@
 <div class="container">
     <h1 class="mb-4">All Bookings</h1>
 
+    <!-- Success Message -->
     @if (session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
@@ -11,6 +12,18 @@
     </div>
     @endif
 
+    <!-- Error Message -->
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+    <!-- Bookings Table -->
     <div class="card">
         <div class="card-header">
             Booking List
@@ -40,10 +53,11 @@
                         <td>
                             <a href="{{ route('bookings.show', $booking->id) }}" class="btn btn-info btn-sm">View</a>
                             <a href="{{ route('bookings.edit', $booking->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <!-- Delete Form -->
                             <form action="{{ route('bookings.destroy', $booking->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this booking?')">Delete</button>
                             </form>
                         </td>
                     </tr>

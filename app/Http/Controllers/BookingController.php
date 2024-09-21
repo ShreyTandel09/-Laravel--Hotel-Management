@@ -8,6 +8,7 @@ use App\Models\HotelRooms;
 use App\Models\RoomRents;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
@@ -27,7 +28,6 @@ class BookingController extends Controller
     {
         try {
 
-            // dd($request->all());
             // Validate request data
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
@@ -38,14 +38,16 @@ class BookingController extends Controller
                 // 'room_id' => 'required|exists:rooms,id',
             ]);
 
-
             // Create a new customer using validated data
             $customer = Customer::create($validatedData);
 
             // dd($request->room_no);
 
-            // Find the room
+            // Find the room update the occupancy
             $room = HotelRooms::findOrFail($request->room_no);
+            $room->max_occupancy = $room->max_occupancy - 1;
+            $room->save();
+
 
             // dd($room->id);  
 
@@ -60,8 +62,9 @@ class BookingController extends Controller
 
             return redirect()->route('bookings.index')->with('success', 'Booking successful!');
         } catch (\Throwable $th) {
-            dd($th);
-            return redirect()->back()->withErrors(['error' => 'Booking failed.'])->withInput();
+            // Log the error and show a generic error message
+            Log::error($th->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Booking failed. Please try again.'])->withInput();
         }
     }
 

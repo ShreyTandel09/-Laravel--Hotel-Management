@@ -19,10 +19,24 @@
 
     <div class="form-group">
         <label for="amenities">Amenities</label><br>
-        <label><input type="checkbox" name="amenities[bathtub]" value="1" {{ json_decode($room->amenities)->bathtub ?? false ? 'checked' : '' }}> Bathtub</label><br>
-        <label><input type="checkbox" name="amenities[balcony]" value="1" {{ json_decode($room->amenities)->balcony ?? false ? 'checked' : '' }}> Balcony</label><br>
-        <label><input type="checkbox" name="amenities[mini_bar]" value="1" {{ json_decode($room->amenities)->mini_bar ?? false ? 'checked' : '' }}> Mini Bar</label>
+        <label>
+            <input type="checkbox" name="amenities[]" value="bathtub"
+                {{ in_array('bathtub', json_decode($room->amenities) ?? []) ? 'checked' : '' }}>
+            Bathtub
+        </label><br>
+        <label>
+            <input type="checkbox" name="amenities[]" value="balcony"
+                {{ in_array('balcony', json_decode($room->amenities) ?? []) ? 'checked' : '' }}>
+            Balcony
+        </label><br>
+        <label>
+            <input type="checkbox" name="amenities[]" value="mini_bar"
+                {{ in_array('mini_bar', json_decode($room->amenities) ?? []) ? 'checked' : '' }}>
+            Mini Bar
+        </label>
     </div>
+
+
     <div class="form-group">
         <label for="start_date">Start Date</label>
         <input type="date" name="start_date" id="start_date" class="form-control" value="{{ $room->start_date }}" required>

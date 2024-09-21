@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HotelRoomsController;
 use App\Http\Controllers\RoomRentsController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,12 @@ Route::resource('rooms', HotelRoomsController::class);
 
 Route::post('/rooms/available', [HotelRoomsController::class, 'getAvailableRooms'])->name('rooms.available');
 Route::post('/calculate-cost', [BookingController::class, 'calculateCost'])->name('calculate.cost');
+
+//Dashboard Controller
+Route::get('/dashboard-heatmap', [DashboardController::class, 'heatmap'])->name('dashboard.heatmap');
+Route::get('/dashboard-roomSummary', [DashboardController::class, 'roomSummary'])->name('dashboard.roomSummary');
+Route::get('/dashboard-vacancies', [DashboardController::class, 'vacancies'])->name('dashboard.vacancies');
+
 
 
 // Routes for Booking Management

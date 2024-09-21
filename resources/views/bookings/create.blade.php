@@ -68,8 +68,10 @@
 
 <script>
     $(document).ready(function() {
-        $('input[name="amenities[]"]').change(function() {
+        $('input[name="amenities[]"],#start_date, #end_date, #room_type').change(function() {
             var roomType = $('#room_type').val();
+            var startDate = $('#start_date').val();
+            var endDate = $('#end_date').val();
             var amenities = $('input[name="amenities[]"]:checked').map(function() {
                 return $(this).val(); // Get the value of each checked checkbox
             }).get();
@@ -81,6 +83,8 @@
                 url: "{{ route('rooms.available') }}",
                 type: "POST",
                 data: {
+                    start_date: startDate,
+                    end_date: endDate,
                     room_type: roomType,
                     amenities: amenities,
                     _token: "{{ csrf_token() }}"

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Models\HotelRooms;
 use App\Models\RoomRents;
 use Illuminate\Http\Request;
@@ -32,7 +33,6 @@ class HotelRoomsController extends Controller
         // $this->validateRoomData($request);   // Validation moved to a helper method
         // dd(json_encode($request->all()));
 
-        // Use Eloquent relationships for clean data handling
         $hotelRoom = HotelRooms::create([
             'room_no' => $request->room_no,
             'room_type' => $request->room_type,
@@ -62,7 +62,10 @@ class HotelRoomsController extends Controller
         $room = HotelRooms::select('hotel_rooms.*', 'room_rents.rent', 'room_rents.start_date', 'room_rents.end_date')
             ->leftJoin('room_rents', 'hotel_rooms.id', '=', 'room_rents.hotel_rooms_id')
             ->where('hotel_rooms.id', $id)
-            ->first(); // Fetch single room       
+            ->first(); // Fetch single room     
+
+
+        // dd($room->amenities);
         return view('rooms.edit', compact('room'));
     }
 
@@ -122,11 +125,16 @@ class HotelRoomsController extends Controller
 
     public function getAvailableRooms(Request $request)
     {
+
+        // dd($request->all());
         $roomType = $request->input('room_type');
         $amenities = $request->input('amenities', []);
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
         // Fetch rooms based on room type and selected amenities
         $rooms = HotelRooms::where('room_type', $roomType)
+            ->where("max_occupancy", '>', '0')
             ->where(function ($query) use ($amenities) {
                 foreach ($amenities as $amenity) {
                     // Search for each amenity in the JSON array
@@ -135,6 +143,23 @@ class HotelRoomsController extends Controller
             })
             ->get();
 
-        return response()->json($rooms);
+        // Filter rooms based on availability
+        $availableRooms = $rooms->filter(function ($room) use ($startDate, $endDate) {
+            return $this->isRoomAvailable($room->id, $startDate, $endDate);
+        });
+
+        return response()->json($availableRooms);
+    }
+
+    private function isRoomAvailable($roomNo, $startDate, $endDate)
+    {
+        $bookings = Booking::where('hotel_rooms_id', $roomNo)
+            ->where(function ($query) use ($startDate, $endDate) {
+                $query->where('start_date', '<=', $endDate)
+                    ->where('end_date', '>=', $startDate);
+            })
+            ->get();
+
+        return $bookings->isEmpty();
     }
 }
