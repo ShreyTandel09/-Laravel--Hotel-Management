@@ -8,7 +8,7 @@
     <div class="heatmap-info">
         <span class="heatmap-legend red"></span> Red: >80% Full |
         <span class="heatmap-legend orange"></span> Orange: >60% Full |
-        <span class="heatmap-legend yellow"></span> Yellow: >40% Full
+        <span class="heatmap-legend green"></span> Less Then Green: 40%
     </div>
 
     <div class="calendar-grid" id="calendar-grid">
@@ -21,6 +21,18 @@
     <p>Click a date to view room occupancy.</p>
     <div id="summaryDetails">
         <!-- Room summary details will load here -->
+    </div>
+
+    <div id="vacancyDetails">
+        <h3>Rooms Getting Vacant Today</h3>
+        <ul id="vacantRoomsList">
+            <!-- Vacant rooms will be listed here -->
+        </ul>
+
+        <h3>Rooms Receiving New Guests Today</h3>
+        <ul id="newGuestRoomsList">
+            <!-- Rooms with new guests will be listed here -->
+        </ul>
     </div>
 </div>
 
@@ -69,12 +81,23 @@
             success: function(data) {
                 $('#summaryDetails').html(`
                     <h4>Summary for ${date}</h4>
-                    <p>Booked Rooms: ${data.bookedRooms}</p>
-                    <p>Empty Rooms: ${data.emptyRooms}</p>
-                    <ul>
-                        ${data.rooms.map(room => `<li>${room.room_no} - ${room.room_type}</li>`).join('')}
-                    </ul>
+                    <p>Rooms Receiving New Guests: ${data.checkInRooms.length}</p>
+                    <p>Rooms Getting Vacant: ${data.checkOutRooms.length}</p>
                 `);
+
+                // Clear the previous lists
+                $('#vacantRoomsList').empty();
+                $('#newGuestRoomsList').empty();
+
+                // Append vacant rooms
+                $.each(data.checkOutRooms, function(index, room) {
+                    $('#vacantRoomsList').append(`<li>Room ${room.room_no} (${room.room_type}) - Guest : ${room.guest}</li>`);
+                });
+
+                // Append new guest rooms
+                $.each(data.checkInRooms, function(index, room) {
+                    $('#newGuestRoomsList').append(`<li>Room ${room.room_no} (${room.room_type}) - New Guest : ${room.guest}</li>`);
+                });
             },
             error: function(xhr) {
                 console.error(xhr.responseText);
@@ -109,8 +132,8 @@
         background-color: orange;
     }
 
-    .heatmap-legend.yellow {
-        background-color: yellow;
+    .heatmap-legend.green {
+        background-color: green;
     }
 
     .calendar-grid {
@@ -138,8 +161,8 @@
         background-color: orange;
     }
 
-    .calendar-day.yellow {
-        background-color: yellow;
+    .calendar-day.green {
+        background-color: green;
     }
 
     .calendar-day:hover {

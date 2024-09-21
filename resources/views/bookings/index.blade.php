@@ -35,6 +35,7 @@
                         <th>#</th>
                         <th>Customer Name</th>
                         <th>Room Number</th>
+                        <th>Room Type</th>
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Total Cost</th>
@@ -47,6 +48,7 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $booking->customer->name }}</td>
                         <td>{{ $booking->room->room_no }}</td>
+                        <td>{{ $booking->room->room_type }}</td>
                         <td>{{ $booking->start_date }}</td>
                         <td>{{ $booking->end_date }}</td>
                         <td>${{ number_format($booking->total_cost, 2) }}</td>

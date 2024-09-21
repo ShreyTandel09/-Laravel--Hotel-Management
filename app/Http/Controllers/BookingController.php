@@ -43,10 +43,8 @@ class BookingController extends Controller
 
             // dd($request->room_no);
 
-            // Find the room update the occupancy
+            // Find the room 
             $room = HotelRooms::findOrFail($request->room_no);
-            $room->max_occupancy = $room->max_occupancy - 1;
-            $room->save();
 
 
             // dd($room->id);  
